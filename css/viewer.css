@@ -163,18 +163,38 @@ input[type="range"] {
   }
 }
 
-html {
-  width: 100%;
-  overflow-x: hidden;
-  box-sizing: border-box;
+/* ローディング画面中央寄せ */
+#loadingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-*, *::before, *::after {
-  box-sizing: inherit;
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #ccc;
+  border-top-color: #007acc;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
 }
 
-img, video {
-  max-width: 100%;
-  height: auto;
-  display: block;
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #444;
 }
