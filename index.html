@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>STAT画像学習システム</title>
+  <link rel="stylesheet" href="css/index.css" />
+  <style>
+    body {
+      display: none;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const correctPassword = "1234";
+      let attempts = 0;
+      let success = false;
+
+      while (attempts < 3) {
+        const input = prompt("パスワードを入力してください：");
+        if (input === correctPassword) {
+          success = true;
+          location.replace("patient.html");
+          break;
+        } else {
+          attempts++;
+          alert(`パスワードが間違っています（${attempts}回目）`);
+        }
+      }
+
+      if (success) {
+        document.body.style.display = "block";
+      } else {
+        // 履歴を上書きして他サイトへリダイレクト
+        location.replace("denied.html");
+      }
+    });
+  </script>
+</head>

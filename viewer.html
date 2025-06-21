@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>STAT画像学習システム</title>
+  <link rel="stylesheet" href="css/viewer.css" />
+</head>
+<body>
+  <div id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Loading...</div>
+  </div>
+
+  <main style="display: none">
+    <h1 id="setTitle">検査画像</h1>
+
+    <div class="set-buttons" id="setButtonsContainer"></div>
+
+    <div class="viewer">
+      <img id="ctImage" src="" alt="CT Slice" />
+    </div>
+
+    <div class="slider-container">
+      <button class="arrow-button" onclick="changeSlice(-1)">←</button>
+      <input
+        type="range"
+        id="sliceSlider"
+        min="1"
+        step="1"
+        oninput="updateSlice(parseInt(this.value))"
+      />
+      <button class="arrow-button" onclick="changeSlice(1)">→</button>
+    </div>
+
+    <div class="slice-info" id="sliceInfo">現在のスライス: 1</div>
+
+    <div class="navigation">
+      <button onclick="location.href='answer.html'">
+        <span class="icon">▶</span>
+        <span class="label">解答</span>
+      </button>
+    </div>
+  </main>
+
+  <script>
+    const imageSets = {
+      "abd-p-tra": { label: '単純', totalSlices: 152, padding: 5 },
+      "abd-ce-tra": { label: '造影', totalSlices: 152, padding: 5 },
+      "abd-ce-cor": { label: '造影cor', totalSlices: 114, padding: 5 }
+    };
+
+    let currentSet = 'abd-p-tra';
+    let currentSlice = 1;
+    const imageCache = {};
+
+    const ctImage = document.getElementById("ctImage");
+    const slider = document.getElementById("sliceSlider");
+    const info = document.getElementById("sliceInfo");
+    const title = document.getElementById("setTitle");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    const mainContent = document.querySelector("main");
+    const setButtonsContainer = document.getElementById("setButtonsContainer");
+
+    function getImageFilename(n, set = currentSet) {
+      const padding = imageSets[set].padding || 0;
+      const padded = String(n).padStart(padding, '0');
+      return `${set}/${set}-${padded}.jpg`;
+    }
+
+    function preloadImages(set, callback) {
+      if (imageCache[set]) {
+        callback();
+        return;
+      }
+
+      const { totalSlices } = imageSets[set];
+      imageCache[set] = [];
+      let loaded = 0;
+
+      for (let i = 1; i <= totalSlices; i++) {
+        const img = new Image();
+        img.onload = img.onerror = () => {
+          loaded++;
+          if (loaded === totalSlices) callback();
+        };
+        img.src = getImageFilename(i, set);
+        imageCache[set][i] = img;
+      }
+    }
+
+    function updateSlice(n) {
+      const total = imageSets[currentSet].totalSlices;
+      currentSlice = n;
+      const img = imageCache[currentSet]?.[n];
+      ctImage.src = img?.src || getImageFilename(n);
+      info.textContent = `現在のスライス: ${n} / ${total}`;
+      slider.value = n;
+    }
+
+    function changeSlice(step) {
+      const total = imageSets[currentSet].totalSlices;
+      const newSlice = Math.max(1, Math.min(total, currentSlice + step));
+      updateSlice(newSlice);
+    }
+
+    function switchImageSetTo(setName) {
+      loadingOverlay.style.display = "flex";
+      mainContent.style.display = "none";
+
+      currentSet = setName;
+      currentSlice = 1;
+
+      // title.textContent = `CT画像（${imageSets[setName].label}）`; ← これを削除またはコメントアウト
+      slider.max = imageSets[setName].totalSlices;
+      slider.value = currentSlice;
+
+      preloadImages(currentSet, () => {
+        loadingOverlay.style.display = "none";
+        mainContent.style.display = "flex";
+        updateSlice(currentSlice);
+        updateButtonStates();
+      });
+    }
+
+    function createSetButtons() {
+      for (const key in imageSets) {
+        const btn = document.createElement('button');
+        btn.textContent = imageSets[key].label;
+        btn.className = 'set-button';
+        btn.dataset.setKey = key;
+        btn.addEventListener('click', () => switchImageSetTo(key));
+        setButtonsContainer.appendChild(btn);
+      }
+    }
+
+    function updateButtonStates() {
+      const buttons = setButtonsContainer.querySelectorAll('.set-button');
+      buttons.forEach(btn => {
+        const key = btn.dataset.setKey;
+        if (key === currentSet) {
+          btn.disabled = true;
+          btn.innerHTML = `✔️ ${imageSets[key].label}`;
+        } else {
+          btn.disabled = false;
+          btn.innerHTML = imageSets[key].label;
+        }
+      });
+    }
+
+    window.onload = () => {
+      createSetButtons();
+      updateButtonStates();
+      preloadImages(currentSet, () => {
+        loadingOverlay.style.display = "none";
+        mainContent.style.display = "flex";
+        updateSlice(currentSlice);
+      });
+    };
+  </script>
+</body>
+</html>
