@@ -12,7 +12,7 @@ html, body {
 /* mainを縦方向にも中央に */
 main {
   width: 100%;
-  max-width: 600px;
+  max-width: 95vw;
   padding: 1rem;
   display: flex;
   flex-direction: column;
