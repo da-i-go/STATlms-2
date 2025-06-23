@@ -6,6 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>STAT画像学習システム</title>
   <link rel="stylesheet" href="css/viewer.css" />
+  <script>
+  if (sessionStorage.getItem("authenticated") !== "true") {
+    location.replace("index.html");
+  }
+</script>
 </head>
 <body>
   <div id="loadingOverlay">
