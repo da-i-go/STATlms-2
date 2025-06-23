@@ -21,6 +21,7 @@
         const input = prompt("パスワードを入力してください：");
         if (input === correctPassword) {
           success = true;
+          sessionStorage.setItem("authenticated", "true");
           location.replace("patient.html");
           break;
         } else {
