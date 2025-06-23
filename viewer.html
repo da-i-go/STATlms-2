@@ -155,14 +155,23 @@
     }
 
     window.onload = () => {
-      createSetButtons();
-      updateButtonStates();
-      preloadImages(currentSet, () => {
-        loadingOverlay.style.display = "none";
-        mainContent.style.display = "flex";
-        updateSlice(currentSlice);
-      });
-    };
+  createSetButtons();
+  updateButtonStates();
+
+  preloadImages(currentSet, () => {
+    loadingOverlay.style.display = "none";
+    mainContent.style.display = "flex";
+    
+    // 画像読み込みが完了してから描画
+    const firstImage = imageCache[currentSet]?.[currentSlice];
+    if (firstImage?.complete) {
+      updateSlice(currentSlice);
+    } else {
+      firstImage.onload = () => updateSlice(currentSlice);
+    }
+  });
+};
+
   </script>
 </body>
 </html>
