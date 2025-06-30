@@ -6,11 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>診断結果</title>
   <link rel="stylesheet" href="css/answer.css" />
-  <script>
-  if (sessionStorage.getItem("authenticated") !== "true") {
-    location.replace("index.html");
-  }
-</script>
 </head>
 <body>
   <h1>診断結果</h1>
@@ -28,11 +23,11 @@
         <div class="carousel-track-container">
           <ul class="carousel-track">
             <li class="carousel-slide">
-              <img src="Key-images/key-cor.png" alt="穿孔部位">
+              <img src="key-images/key-cor.png" alt="穿孔部位">
               <!--<p class="caption">キャプション加える場所</p>-->
             </li>
             <li class="carousel-slide">
-              <img src="Key-images/key-cor-axi.png" alt="腸管外ガス">
+              <img src="key-images/key-cor-axi.png" alt="腸管外ガス">
               <!--<p class="caption">キャプション加える場所</p>-->
             </li>
           </ul>
@@ -51,7 +46,7 @@
       <p>周囲脂肪識濃度の上昇、腹水が見られる。</p>
     </div>
   </section>
-
+  
   <section class="result-section">
     <h2>■ その後</h2>
     <div class="explanation">
@@ -59,9 +54,18 @@
       <p>その後穿孔が発覚し、再度病院に呼び出しとなり緊急手術となった。</p>
     </div>
   </section>
+  
+    <section class="result-section">
+    <h2>■ 放射線科医より一言</h2>
+    <div class="explanation">
+      <p>free-airが見えるwindowに調整して消化管外ガスを丹念に見よう(消化管ガスが後腹膜に限局していることもある)</p>
+      <p>脂肪組織の濃度上昇、混濁、液貯留があるところを見よう</p>
+      <p>腸管の走行とずれた部分にべんが貯留していないか確認を(大きな穿孔でも意外と気づかないことも)</p>
+    </div>
+  </section>
 
   <div class="back-button">
-    <a href="https://forms.gle/kYGjXJbXaXUaNgz98">次へ</a>
+    <a href="https://anjokosei.jp">次へ</a>
   </div>
 
   <script>
